@@ -114,7 +114,9 @@ def Ordenar_listar_heroes_altura(lista:list):
 #--------------------------------------------------------------------
 def Buscar_minimo_maximo_fuerza(min_max:str, lista:list):
     """
-    
+    Encuentra el valor minimo o maximo de una lista\n
+    Espera que los parametros sean: la palabra minimo o maximo segun la decision del usuario\n
+    El segundo parametro esperado es una lista
     """
     minimo_maximo = 0
     for i in range(len(lista)):
@@ -128,6 +130,12 @@ def Buscar_minimo_maximo_fuerza(min_max:str, lista:list):
 
 
 def Ordenar_listar_heroes_fuerza(lista:list):
+    """
+    Tomando el valor retornado por la funcion minimo-maximo,\n
+    ordena la lista de la manera deseada\n
+    Espera que el parametro ingresado sea la lista de heroes\n
+    Retorna la lista ordenada en forma de string
+    """
     input_usuario = Validar_input_orden()
     lista_ordenada = ""
     for i in range(len(lista)):
@@ -141,6 +149,12 @@ def Ordenar_listar_heroes_fuerza(lista:list):
 
 #--------------------------------------------------------------------
 def Calcular_promedio(lista:list):
+    """
+    Calcula el promedio del tipo de valor que se requiera\n
+    Segun la eleccion del usuario crea una lista con los heroes que superen o no el promedio\n
+    El parametro esperado es la lista de heroes\n
+    Retorna la lista creada en forma de string
+    """
     clave = input("""De cual parametro desea calcular el promedio? 
                 ALTURA
                 FUERZA
@@ -178,6 +192,12 @@ def Calcular_promedio(lista:list):
 
 #--------------------------------------------------------------------
 def Filtrar_inteligencia(lista:list):
+    """
+    Mediante el input decide por cual valor de 'inteligencia' debe filtrar\n
+    y crea una nueva lista con los nombres de los heroes\n
+    El parametro esperado es la lista de heroes\n
+    Retorna la lista filtrada y ordenada en forma de string
+    """
     inteligencia = input("""Los heroes de cual tipo de inteligencia desea saber?
                         >GOOD
                         >AVERAGE
@@ -196,7 +216,12 @@ def Filtrar_inteligencia(lista:list):
 
 
 #--------------------------------------------------------------------
-def Exportar_csv(lista):
+def Exportar_csv(lista:list):
+    """
+    Se encargar de crear un archivo .csv y escribir en él lo que se ingrese\n
+    El parametro esperado es el de una string \n
+    No retorna nada\n
+    """
     with open("Lista Ordenada.csv", "w") as file:
             file.write(lista)
 #--------------------------------------------------------------------
@@ -204,13 +229,22 @@ def Exportar_csv(lista):
 
 #--------------------------------------------------------------------
 def Menu():
-    input_usuario = input("""Que opcion desea elegir?
-                            1->>Filtrar los primeros heroes
-                            2->>Ordenar los heroes por altura
-                            3->>Ordenar los heroes por fuerza
-                            4->>Calcular el promedio y filtrar los que superen o no el mismpo
-                            5->>Filtrar los heroes segun su inteligencia
-                            >>""")
+    """
+    Se encarga de mostrarle las opciones al usuario y segun la eleccion\n
+    y redirigirlo a la funcion correspondiente para suplir la demanda\n
+    No espera ningun parametro\n
+    No retorna nada
+    """
+    input_usuario = input(
+    """
+    Que opcion desea elegir?
+    1->>Filtrar los primeros heroes
+    2->>Ordenar los heroes por altura
+    3->>Ordenar los heroes por fuerza
+    4->>Calcular el promedio y filtrar los que superen o no el mismpo
+    5->>Filtrar los heroes segun su inteligencia\n
+    >>>""")
+
     if re.search("[1-5]", input_usuario) == None:
         return Mensaje_error_datos()
     if input_usuario == "1":

@@ -1,7 +1,7 @@
 import json
 import re
 
-ruta = r"C:\Users\vilan\OneDrive\Escritorio\Programación & Laboratorio I\Parcial-1\test\pokedex.json"
+ruta = r"C:\Users\vilan\Desktop\Programación & Laboratorio I\Parcial-1\test\pokedex.json"
 
 def cargar_json(ruta:str):
     """
@@ -71,6 +71,8 @@ def ordenar_por_valor(lista:list, clave:str):
                 input_usuario = "maximo"
             for i in range(len(lista)):
                 minimo_maximo = encontrar_minimo_maximo(lista, clave, input_usuario)
+                if minimo_maximo == -1:
+                    return print("Error en los datos")
                 not_lista_ordenada = not_lista_ordenada + "{0}-{1}  {2}-{3}\n".format(i+1, lista[minimo_maximo]["nombre"], clave, lista[minimo_maximo][clave])
                 lista.pop(minimo_maximo)
             condicion = False    
@@ -110,6 +112,12 @@ def calcular_promedio(lista:list, clave:str):
 
 
 def Buscar_por_tipo(lista:list):
+    """
+    Se encarga de seleccionar los Pokemones coincidentes 
+    con el tipo ingresado por el usuario y crear una lista\n
+    Como parametro espera recibir la lista de los pokemones\n
+    Retorna una string con formato de lista
+    """
     lista_tipos = []
     lista_regex = ""
     not_lista_tipos = "La lista de que tipo de Pokemon desea saber?\n"
@@ -125,12 +133,38 @@ def Buscar_por_tipo(lista:list):
         lista_regex += "{0}|".format(lista_tipos[tipo])
     while condicion:
         input_usuario = input(not_lista_tipos)
-        if re.search(lista_regex, input_usuario, re.IGNORECASE):
+        findall = re.findall(lista_regex, input_usuario, re.IGNORECASE)
+        if findall[0] == input_usuario:
             condicion = False
             input_usuario = input_usuario.lower()
-    #        for tipo in range(len(lista_tipos)):
-    #            if input_usuario == lista_tipos[tipo]:
-    #                not_lista_kokes_por_tipo += ""
+            for i in range(len(lista_pokemones)): 
+                for a in range(len(lista_pokemones[i]["tipo"])): 
+                    if re.search(input_usuario, lista_pokemones[i]["tipo"][a]) != None:
+                        not_lista_kokes_por_tipo += "{0} / Tipo: {1} \n".format(lista_pokemones[i]["nombre"], lista_pokemones[i]["tipo"][a])
+        else:
+            continue
+    return not_lista_kokes_por_tipo
 
+def exportar_csv(lista:str):
+    """
+    Se encargar de crear un archivo .csv y escribir en él lo que se ingrese\n
+    El parametro esperado es el de una string \n
+    No retorna nada\n
+    """
+    with open("Lista filtrada.csv", "w") as file:
+        file.write(lista)
 
-Buscar_por_tipo(lista_pokemones)
+def menu():
+    condicion = True
+    while condicion:
+        input_usuario = input("Que opcion desea elegir?\n1 - Listar los primeros Pokemones\n2 - Ordenarlos por el valor de poder\n3 - Ordenarlos por ID\n4 - Calcular la cantidad promedio por habilidad\n5 - Filtrar por tipo\n>>>")
+        if re.search("[1-5]", input_usuario) != None:
+            condicion = False
+            if input_usuario == "1":
+                lista_csv = listar_primeros_pokemones(lista_pokemones)
+            else:
+                if input_usuario == "2":
+                    lista_csv = ordenar_por_valor(lista_pokemones, "poder")
+    print(lista_csv)          
+menu()
+

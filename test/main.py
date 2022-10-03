@@ -1,4 +1,3 @@
+import funciones
 
-
-
-if re.search("minimo|maximo", clave, re.IGNORECASE):
+funciones.menu()

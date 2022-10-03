@@ -94,7 +94,7 @@ def calcular_promedio(lista:list, clave:str):
 
     promedio_key = suma/len(lista)
     while condicion:
-        input_usuario = input("Desea conocer la lista de quienes tienen una cantidad mayor al promedio o quienes tienen una menor cantidad?\n-MAYOR\nMENOR\n>>>")
+        input_usuario = input("Desea conocer la lista de quienes tienen una cantidad mayor al promedio o quienes tienen una menor cantidad?\n-MAYOR\n-MENOR\n>>>")
         if re.search("mayor|menor", input_usuario, re.IGNORECASE):
             input_usuario = input_usuario.lower()
             condicion = False
@@ -122,7 +122,7 @@ def Buscar_por_tipo(lista:list):
     lista_regex = ""
     not_lista_tipos = "La lista de que tipo de Pokemon desea saber?\n"
     condicion = True
-    not_lista_kokes_por_tipo = ""
+    not_lista_kokes_por_tipo = "\n"
     for kokemon in range(len(lista)):
         for tipo in range(len(lista[kokemon]["tipo"])):
             lista_tipos.append(lista[kokemon]["tipo"][tipo])
@@ -140,9 +140,7 @@ def Buscar_por_tipo(lista:list):
             for i in range(len(lista_pokemones)): 
                 for a in range(len(lista_pokemones[i]["tipo"])): 
                     if re.search(input_usuario, lista_pokemones[i]["tipo"][a]) != None:
-                        not_lista_kokes_por_tipo += "{0} / Tipo: {1} \n".format(lista_pokemones[i]["nombre"], lista_pokemones[i]["tipo"][a])
-        else:
-            continue
+                        not_lista_kokes_por_tipo += "{0} / Tipo/s: {1} \n".format(lista_pokemones[i]["nombre"], lista_pokemones[i]["tipo"])
     return not_lista_kokes_por_tipo
 
 def exportar_csv(lista:str):
@@ -165,6 +163,27 @@ def menu():
             else:
                 if input_usuario == "2":
                     lista_csv = ordenar_por_valor(lista_pokemones, "poder")
+                else:
+                    if input_usuario == "3":
+                        lista_csv = ordenar_por_valor(lista_pokemones, "id")
+                    else:
+                        if input_usuario == "4":
+                            while True:
+                                input_usuario = input("La cantidad promedio de cual cualidad desea saber?\n>>TIPO\n>>EVOLUCIONES\n>>FORTALEZA\n>>DEBILIDAD\n>>>")
+                                if re.search("tipo|evoluciones|fortaleza|debilidad", input_usuario, re.IGNORECASE):
+                                    input_usuario = input_usuario.lower()
+                                    lista_csv = calcular_promedio(lista_pokemones, input_usuario)
+                                    break
+                        else:
+                            lista_csv = Buscar_por_tipo(lista_pokemones)
+    while True:
+        input_usuario = input("Desea exportar la lista a un archivo .csv?\n>>SI\n>>NO\n>>>")
+        if re.search("si|no", input_usuario, re.IGNORECASE):
+            input_usuario = input_usuario.lower()
+            if input_usuario == "si":
+                exportar_csv(lista_csv)
+            break
+                        
     print(lista_csv)          
 menu()
 

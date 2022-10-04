@@ -111,6 +111,47 @@ def calcular_promedio(lista:list, clave:str):
     return lista_filtrada
 
 
+def crear_lista_tipos(lista:list):
+    """
+    Se encarga de imprimir la lista de todos los tipossd de pokemones\n
+    Como parametro espera recibir la lista de los pokemones\n
+    Retorna la lista de tipos
+    """
+    lista_tipos = []
+    not_lista_tipos = ""
+    for kokemon in range(len(lista)):
+        for tipo in range(len(lista[kokemon]["tipo"])):
+            lista_tipos.append(lista[kokemon]["tipo"][tipo])
+    lista_tipos = set(lista_tipos)
+    lista_tipos = list(lista_tipos)
+    for tipo in range(len(lista_tipos)):
+        not_lista_tipos += "{0}\n".format(lista_tipos[tipo].capitalize())
+    return lista_tipos, not_lista_tipos
+
+
+def buscar_listar_coincidencias(lista:list, not_lista, consigna_regex:str):
+    """
+    Busca todas las coincidencias entre el input del ususario 
+    y los valores de la key "tipo".\n
+    Como parametro espera recibir la lista de pokemones, 
+    la lista de todos los tipos de pokemones existentes
+    y la RegEx necesaria para hallar los valores.\n
+    Retorna una string en formato de lista de todos los pokemones coincidentes
+    """
+    not_lista_tipos = "La lista de que Pokemon desea saber\n"
+    not_lista_pokemones = ""
+    while True:
+        input_usuario = input(not_lista_tipos + not_lista)
+        if re.search(consigna_regex, input_usuario, re.IGNORECASE) != None:
+            input_usuario = input_usuario.lower()        
+            for i in range(len(lista)):
+                for tipo in lista[i]["tipo"]:
+                    if re.search(input_usuario, tipo):
+                        not_lista_pokemones += "{0} / Tipo/s: {1} \n".format(lista_pokemones[i]["nombre"], lista_pokemones[i]["tipo"])
+            break
+    return not_lista_pokemones
+
+
 def Buscar_por_tipo(lista:list):
     """
     Se encarga de seleccionar los Pokemones coincidentes 
@@ -118,30 +159,15 @@ def Buscar_por_tipo(lista:list):
     Como parametro espera recibir la lista de los pokemones\n
     Retorna una string con formato de lista
     """
-    lista_tipos = []
     lista_regex = ""
-    not_lista_tipos = "La lista de que tipo de Pokemon desea saber?\n"
-    condicion = True
-    not_lista_kokes_por_tipo = "\n"
-    for kokemon in range(len(lista)):
-        for tipo in range(len(lista[kokemon]["tipo"])):
-            lista_tipos.append(lista[kokemon]["tipo"][tipo])
-    lista_tipos = set(lista_tipos)
-    lista_tipos = list(lista_tipos)
-    for tipo in range(len(lista_tipos)):
-        not_lista_tipos += ">> {0}\n".format((lista_tipos[tipo]).capitalize())
-        lista_regex += "{0}|".format(lista_tipos[tipo])
-    while condicion:
-        input_usuario = input(not_lista_tipos)
-        findall = re.findall(lista_regex, input_usuario, re.IGNORECASE)
-        if findall[0] == input_usuario:
-            condicion = False
-            input_usuario = input_usuario.lower()
-            for i in range(len(lista_pokemones)): 
-                for a in range(len(lista_pokemones[i]["tipo"])): 
-                    if re.search(input_usuario, lista_pokemones[i]["tipo"][a]) != None:
-                        not_lista_kokes_por_tipo += "{0} / Tipo/s: {1} \n".format(lista_pokemones[i]["nombre"], lista_pokemones[i]["tipo"])
-    return not_lista_kokes_por_tipo
+    lista_tipos, not_lista_tipos = crear_lista_tipos(lista)
+    for i in range(len(lista_tipos)):
+        lista_regex += "{0}|".format(lista_tipos[i])
+    lista_regex = lista_regex.rstrip(lista_regex[-1])
+    not_lista_pokemones_tipo = buscar_listar_coincidencias(lista, not_lista_tipos, lista_regex)
+    return not_lista_pokemones_tipo
+
+
 
 def exportar_csv(lista:str):
     """
@@ -185,5 +211,6 @@ def menu():
             break
                         
     print(lista_csv)          
-menu()
+
+
 
